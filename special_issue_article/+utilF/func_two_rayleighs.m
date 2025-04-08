@@ -1,4 +1,4 @@
-function fVal = func_two_rayleighs( s , sigmaMin , sigmaMax)
+function fVal = func_two_rayleighs(s, sigmaMin, sigmaMax)
     %
     % Function which depends on two Rayleigh CDFs. 
     %

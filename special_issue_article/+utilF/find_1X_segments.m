@@ -65,7 +65,6 @@ function [segment1XStartPos, segment1XLengths] = find_1X_segments(binaryStateSeq
             segment1XLengths(2:end-1) = idxUp(2:end)-idxDown(1:end-1);
             segment1XLengths(end) = length(binaryStateSeq) - idxDown(end);          
         end
-
     end
 
     % segment1XStartPos

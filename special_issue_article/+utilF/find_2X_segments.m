@@ -18,12 +18,6 @@ function [segment2XStartPos, segment2XLengths] = find_2X_segments(binaryStateSeq
     idxUp = find(diffX == 1);
     idxDown = find(diffX == -1);
 
-    % if isempty(idxUp) || isempty(idxDown) % in case of no state switches
-    %     segment2XStartPos = [];
-    %     segment2XLengths = [];
-    %     return
-    % end
-
     if isempty(idxUp) && isempty(idxDown) % in case of no state switches
         segment2XStartPos = [];
         segment2XLengths = [];
@@ -72,8 +66,6 @@ function [segment2XStartPos, segment2XLengths] = find_2X_segments(binaryStateSeq
             segment2XLengths(2:end-1) = idxDown(2:end)-idxUp(1:end-1);
             segment2XLengths(end) = length(binaryStateSeq) - idxUp(end);          
         end
-
     end
-
 end
 

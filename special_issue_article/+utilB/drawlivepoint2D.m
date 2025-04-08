@@ -31,13 +31,9 @@ function [posNew, logLnew, reject] = drawlivepoint2D(pointArr, logLworst, deltaT
     % ------------- approximate a bounding ellipsoid ---------------------
     
     mean_p = mean(pointArr); % estimated mean of points
-%     app_C = zeros(nDims,nDims); 
-    
+ 
     % Estimate covariance matrix statistically
     app_C = cov(pointArr,1); % compute covariance matrix
-
-%     app_C = (pointArr-mean_p)'*(pointArr-mean_p);
-%     app_C = app_C/nPoints; % estimated covariance matrix
     inv_appC = inv(app_C); % inverse of covariance matrix
     
     % Find a bounding ellipsoid
@@ -48,17 +44,12 @@ function [posNew, logLnew, reject] = drawlivepoint2D(pointArr, logLworst, deltaT
 %         kVec(i) = (pointArr(i,:)-mean_p)*(app_C\((pointArr(i,:)-mean_p)'));
     end
     kScale = max(kVec); % pick the largest k
-    % kNew = kScale*1.06^nDims; % slightly enlarge the ellipsoid
     kNew = kScale*1.06^2; % slightly enlarge the ellipsoid
-%     kNew = kScale;
     
     % ------------ sample uniformly from bounding ellipsoid --------------
     
     % Compute a transformation matrices from ball to ellipsoid
     [R,D] = eig(app_C); % matrix of eigenvectors and of eigenvalues
-%     [~,D,R] = eig(app_C); 
-%     R = R';
-%     T = sqrt(kNew)*R'*sqrt(D)*R; % transformation matrix from ball to ellipsoid
     T = sqrt(kNew)*R*sqrt(D)*R'; % transformation matrix from ball to ellipsoid
 
     % -- test correctness --
@@ -97,7 +88,6 @@ function [posNew, logLnew, reject] = drawlivepoint2D(pointArr, logLworst, deltaT
         reject = reject+1;
     end
 
-%     y = horzcat(sort(y(1:2),'descend'),y(3:4));
     if y(2) > y(1) % D2 > D1
 
         y = [y(2),y(1),y(4),y(3)]; % enforce D1>D2

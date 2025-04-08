@@ -1,4 +1,4 @@
-function fVal = func_self_consistency_eq( p , f, D12, lThresh1X , lThresh2X, N )
+function fVal = func_self_consistency_eq( p , f, D12, lThresh1X , lThresh2X)
     %
     % Function whose root is an estimate of p_12.
     %

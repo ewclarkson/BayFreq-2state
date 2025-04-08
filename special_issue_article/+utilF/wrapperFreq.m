@@ -19,8 +19,7 @@ function [p12DoublyCorrected, p21DoublyCorrected, p12NoCorrection, p21NoCorrecti
     % 
 
     sThresh = utilF.determine_optimal_thresh_displ(sigmaB1,sigmaB2); % displacement threshold
-%     q = raylcdf(sThresh,sigmaB1); % probability of a single displacement being correctly labelled in the thresholding
-    q = raylcdf(sThresh,sigmaB2); % use this if D1>D2, otherwise switch to sigmaB1 in the expression
+    q = raylcdf(sThresh,sigmaB2); % NOTE: use this if D1>D2, otherwise switch to sigmaB1 in the expression
     lThresh = round(log(0.03)/log(1-q)); % set threshold based on a p-value of 0.03
     
     flag = true; % true until a solution has been found 
@@ -28,7 +27,8 @@ function [p12DoublyCorrected, p21DoublyCorrected, p12NoCorrection, p21NoCorrecti
         flag = false;
         try
             [p12DoublyCorrected, p21DoublyCorrected, p12NoCorrection, p21NoCorrection,...
-                p12FP, p21FP, p12FN, p21FN] = utilF.method_of_moments_thresh(lThresh,data,fTrue,sigmaB1,sigmaB2);
+                p12FP, p21FP, p12FN, p21FN] = utilF.method_of_moments_thresh(...
+                sThresh,q,lThresh,data,fTrue);
         catch
             lThresh = lThresh-1; % lower segment length threshold if necessary
             flag = true;

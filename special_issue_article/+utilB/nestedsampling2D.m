@@ -46,11 +46,6 @@ function [deadPoints,thetaMLE,logZ] = nestedsampling2D(nLive, StopRatio, priorLi
     init_p12s = p12_min + (p12_max-p12_min).*rand(nLive,1); % initial p12-coordinates for every live point
     init_p21s = p21_min + (p21_max-p21_min).*rand(nLive,1); % initial p21-coordinates for every live point
     
-    % for i = 1:nLive % do for every live point
-    % 
-    %    livePoints(i).pos = [init_D1s(i),init_D2s(i),init_p12s(i),init_p21s(i)]; % assign values to points 
-    % end
-    
     pointArr = zeros(nLive, 4); % for later drawing new live points
     for i = 1:nLive % do for every live point
 
@@ -88,12 +83,7 @@ function [deadPoints,thetaMLE,logZ] = nestedsampling2D(nLive, StopRatio, priorLi
         end
         logZ = logsumexp2(logZ, logLworst+logWeight);
         
-        % Sample a new point 
-        % pointArr = zeros(nLive, 4); % To hold the positions of all live points
-        % for i = 1:nLive % do for every live point
-        %     pointArr(i,:) = livePoints(i).pos; % fill pointArr
-        % end
-     
+        % Sample a new point      
         [posNew, logLnew] = drawlivepoint2D(pointArr, logLworst, deltaT, dispCell, priorLimits); % new point
         
         % Store dead point
@@ -124,28 +114,18 @@ function [deadPoints,thetaMLE,logZ] = nestedsampling2D(nLive, StopRatio, priorLi
     for i = 1:length(deadPoints) % do for every dead point
         
         deadPoints(i).postWt = exp(deadPoints(i).logWeight+...
-            deadPoints(i).logL-logZ);
-
-%         deadPoints(i).postWt = deadPoints(i).logWeight+...
-%             deadPoints(i).logL-logZ;
-          
+            deadPoints(i).logL-logZ);      
     end
     
     for i = 1:nLive % do for every live point left
         
         deadPoints(end+1).postWt = exp(logWeight+...
             livePoints(i).logL-logZ);
-
-%         deadPoints(end+1).postWt = logWeight+...
-%             livePoints(i).logL-logZ;
         
         deadPoints(end).pos = livePoints(i).pos;
         deadPoints(end).logWeight = logWeight;
         deadPoints(end).logL = livePoints(i).logL;
     end
-
-    % Compute posterior averages of model parameters
-    % - do after function output instead
 
     % Find MLE of model parameters theta
     [~, ind_max]=max([livePoints.logL]);

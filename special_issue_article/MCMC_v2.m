@@ -9,16 +9,17 @@ function [averaged, errorUpper, errorLower, s1, s2, s3, s4] = MCMC_v2(num_MC_ste
     %            parameter directions: [D1, D2, p12, p21]
     % guessArr = initial guess of parameter values, on the form 
     %            [D1, D2, p12, p21]
-    % deltaT = sampling time (time between frames)
-    % trackCell = cell array containing all trajectory displacements
+    % tau = sampling time (time between frames)
+    % data = cell array containing all trajectory displacements
     % 
     % Output:
     % averaged = parameter estimations as averages after thermalisation
+    % errorUpper - upper confidence levels on estimated parameters
+    % errorLower - lower confidence levels on estimated parameters
     % s1, s2, s3, s4 = acceptance rates for proposals along parameteres
     %                  D1, D2, p12, p21, respectively
     % 
     % Dependencies:
-    % Markov_likelihood
     % Ens_likelihood
     % 
 
@@ -108,7 +109,7 @@ function [averaged, errorUpper, errorLower, s1, s2, s3, s4] = MCMC_v2(num_MC_ste
     errorLower = [D1sorted(1+Nrem) D2sorted(1+Nrem) p12sorted(1+Nrem) p21sorted(1+Nrem)];
     errorUpper = [D1sorted(end-Nrem) D2sorted(end-Nrem) p12sorted(end-Nrem) p21sorted(end-Nrem)]; 
 
-    % ------------------ plot results --------------------
+    % ------------------ plot MCMC walk --------------------
 %     
 %     MCMCstepVec = 0:1:num_MC_steps-1;
 % 
